@@ -14,9 +14,6 @@ class Player:
         if self.can_afford(unit.cost):
             self.units.append(unit)
             self.money -= unit.cost
-            print(f"Purchased {unit.name} for {unit.cost}. Remaining money: {self.money}")
-        else:
-            print("Not enough money to purchase this unit.")
 
     def unit_count(self):
         return len(self.units)
