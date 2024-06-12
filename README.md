@@ -32,10 +32,9 @@ To run the game, follow these steps:
 
 3. Run the game:
 
-```sh
-Copy code
-python main.py
-```
+    ```sh
+    python main.py
+    ```
 
 ## How to Play
 1. Each player starts with a fixed amount of money.
@@ -44,6 +43,7 @@ python main.py
 4. The game conducts multiple battles, and the player with the most units at the end wins.
 
 ## Project Structure
+```
 war_game/
 │
 ├── main.py        # Entry point of the game
@@ -52,7 +52,7 @@ war_game/
 ├── player.py      # Player class and methods
 ├── battle.py      # Battle mechanics
 └── terrain.py     # Terrain effects
-
+```
 ## Future improvements
 
 - Better fighting mechanics
