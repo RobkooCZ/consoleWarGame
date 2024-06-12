@@ -7,7 +7,7 @@ import math
 
 class Game:
     def __init__(self):
-        self.players = [Player("Player 1"), Player("Player 2")]
+        self.players = [Player(input("Please enter the first player's name: ")), Player(input("Please enter the second player's name: "))]
         self.terrain = Terrain()
 
     def start(self):
@@ -81,7 +81,7 @@ class Game:
                 print("=" * 40)
 
     def play_game(self):
-        for _ in range(3):
+        for _ in range(30):
             battle = Battle(self.players[0], self.players[1], self.terrain.get_random_terrain())
             battle.fight()
 
