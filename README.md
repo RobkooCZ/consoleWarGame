@@ -9,8 +9,6 @@ Welcome to the Console-Based War Game! This is a text-based strategy game where 
 - [How to Play](#how-to-play)
 - [Project Structure](#project-structure)
 - [Future Improvements](#future-improvements)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
