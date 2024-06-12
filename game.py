@@ -13,7 +13,6 @@ class Game:
     def start(self):
         self.setup_game()
         self.play_game()
-        self.end_game()
 
     def setup_game(self):
         initial_cash = 1000
@@ -81,22 +80,31 @@ class Game:
                 print("=" * 40)
 
     def play_game(self):
-        for _ in range(30):
+        while True:
             battle = Battle(self.players[0], self.players[1], self.terrain.get_random_terrain())
             battle.fight()
+            if self.players[0].unit_count() <= 0 or self.players[1].unit_count() <= 0:
+                if self.players[0].unit_count() <= 0:
+                    print("=" * 40)
+                    print(f"\nTHE WAR HAS BEEN WON BY {self.players[1].name}!\n")
+                    print("=" * 40)
+                else:
+                    print("=" * 40)
+                    print(f"\nTHE WAR HAS BEEN WON BY {self.players[0].name}!\n")
+                    print("=" * 40)
+                break
 
-    def end_game(self):
-        print("Game Over")
-        winner = self.determine_winner()
-        if winner:
-            print(f"{winner.name} wins!")
-        else:
-            print("It's a draw!")
+    # def end_game(self):
+    #     winner = self.determine_winner()
+    #     if winner:
+    #         print(f"{winner.name} wins!")
+    #     else:
+    #         print("It's a draw!")
 
-    def determine_winner(self):
-        if self.players[0].unit_count() > self.players[1].unit_count():
-            return self.players[0]
-        elif self.players[0].unit_count() < self.players[1].unit_count():
-            return self.players[1]
-        else:
-            return None
+    # def determine_winner(self):
+    #     if self.players[0].unit_count() > self.players[1].unit_count():
+    #         return self.players[0]
+    #     elif self.players[0].unit_count() < self.players[1].unit_count():
+    #         return self.players[1]
+    #     else:
+    #         return None
