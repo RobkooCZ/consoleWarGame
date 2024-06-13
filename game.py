@@ -2,7 +2,7 @@ from player import Player
 from units import UnitFactory
 from battle import Battle
 from terrain import Terrain
-
+import os
 import math
 
 class Game:
@@ -21,58 +21,49 @@ class Game:
             self.setup_units(player)
 
     def setup_units(self, player):
+        os.system("cls" if os.name == "nt" else "clear")
         print(f"\n{player.name}, purchase your units. Your budget: {player.money}$")
         while player.money > 0:
             unit = input("\nWhat type of unit would you like?\n1) Troop (5$)\n2) Artillery (20$)\n3) Tank (100$)\nInput: ").lower()
             unit_obj = UnitFactory.create_unit(unit)
-            if unit == "troop" or unit == "artillery" or unit == "tank":
+            if unit in ["troop", "artillery", "tank"]:
                 while True:
-                    maxUnits = player.money / unit_obj.cost
+                    max_units = int(player.money / unit_obj.cost)
                     if unit == "artillery":
-                        unitCount = input(f"\nHow much {unit} would you like to buy for {unit_obj.cost}$ each?\nMaximum amount of {unit} with your budget of {player.money}$ is {maxUnits} {unit}.\nInput: ")
+                        unit_count = input(f"\nHow many {unit} would you like to buy for {unit_obj.cost}$ each?\nMaximum amount of {unit} with your budget of {player.money}$ is {max_units} {unit}.\nInput: ")
                     else:
-                        unitCount = input(f"\nHow many {unit}s would you like to buy for {unit_obj.cost}$ each?\nMaximum amount of {unit}s with your budget of {player.money}$ is {maxUnits} {unit}s.\nInput: ")
-                    
-                    if unitCount.isdigit():
-                        totalUnitsCost = int(unitCount) * unit_obj.cost
-                        while True:
-                            moneyLeft = player.money - totalUnitsCost
-                            if moneyLeft < 0:
-                                moneyLeft = moneyLeft * -1
-                            if totalUnitsCost > player.money:
-                                print(f"\nYou can't afford that. It is {moneyLeft}$ over your budget of {player.money}$")
-                                deniedPurchase = True
+                        unit_count = input(f"\nHow many {unit}s would you like to buy for {unit_obj.cost}$ each?\nMaximum amount of {unit}s with your budget of {player.money}$ is {max_units} {unit}s.\nInput: ")
+
+                    if unit_count.isdigit():
+                        total_units_cost = int(unit_count) * unit_obj.cost
+                        money_left = player.money - total_units_cost
+
+                        if total_units_cost > player.money:
+                            print(f"\nYou can't afford that. It is {abs(money_left)}$ over your budget of {player.money}$")
+                            break
+                        else:
+                            if unit == "artillery":
+                                print(f"\nAfter buying {unit_count} {unit}, you would be left with {money_left}$")
+                            else:
+                                print(f"\nAfter buying {unit_count} {unit}s, you would be left with {money_left}$")
+
+                            confirm_purchase = input(f"\nDo you want to purchase {unit_count} {unit}(s) for {total_units_cost}$?\n1) Yes\n2) No\nInput: ").lower()
+                            if confirm_purchase in ["1", "yes"]:
+                                for _ in range(int(unit_count)):
+                                    if unit_obj and player.can_afford(unit_obj.cost):
+                                        player.purchase_unit(unit_obj)
+                                break
+                            elif confirm_purchase in ["2", "no"]:
                                 break
                             else:
-                                if unit == "artillery":
-                                    print(f"\nAfter buying {unitCount} {unit}, you would be left with {moneyLeft}$")
-                                else:
-                                    print(f"\nAfter buying {unitCount} {unit}s, you would be left with {moneyLeft}$")
-                                if unit == "artillery":
-                                    confirmPurchase = input(f"\nDo you want to purchase {unitCount} {unit} for {totalUnitsCost}$?\n1) Yes\n2) No\nInput: ").lower()
-                                else:
-                                    confirmPurchase = input(f"\nDo you want to purchase {unitCount} {unit}s for {totalUnitsCost}$?\n1) Yes\n2) No\nInput: ").lower()
-                                if confirmPurchase == "yes" or confirmPurchase == "no":
-                                    if confirmPurchase == "yes":
-                                        deniedPurchase = False
-                                        break
-                                    if confirmPurchase == "no":
-                                        deniedPurchase = True
-                                        break
-                                else:
-                                    print("=" * 30)
-                                    print("Please enter 'yes' or 'no'")
-                                    print("=" * 30)
-                        break
+                                print("=" * 30)
+                                print("Please enter 'yes' or 'no'")
+                                print("=" * 30)
                     else:
                         print("\n")
                         print("=" * 30)
                         print("Please enter a number.")
                         print("=" * 30)
-                if not deniedPurchase:
-                    for _ in range(int(unitCount)):
-                        if unit_obj and player.can_afford(unit_obj.cost):
-                            player.purchase_unit(unit_obj)
             else:
                 print("\n")
                 print("=" * 40)
@@ -93,18 +84,3 @@ class Game:
                     print(f"\nTHE WAR HAS BEEN WON BY {self.players[0].name}!\n")
                     print("=" * 40)
                 break
-
-    # def end_game(self):
-    #     winner = self.determine_winner()
-    #     if winner:
-    #         print(f"{winner.name} wins!")
-    #     else:
-    #         print("It's a draw!")
-
-    # def determine_winner(self):
-    #     if self.players[0].unit_count() > self.players[1].unit_count():
-    #         return self.players[0]
-    #     elif self.players[0].unit_count() < self.players[1].unit_count():
-    #         return self.players[1]
-    #     else:
-    #         return None
